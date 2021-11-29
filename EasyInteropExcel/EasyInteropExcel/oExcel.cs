@@ -232,8 +232,9 @@ namespace EasyInteropExcel
 
             for (int k = 1; k <= qtdeSheet; k++)
             {
-                string no = oExcel.ActiveWorkbook.Sheets[k].Name;
-                if (no.ToUpper().Equals(nomeSheet.ToUpper()))
+                //string no = oExcel.ActiveWorkbook.Sheets[k].Name;
+                xlExcel.Worksheet Sheet = (xlExcel.Worksheet)oExcel.ActiveWorkbook.Sheets[k];
+                if (Sheet.Name.ToUpper().Equals(nomeSheet.ToUpper()))
                 {
 
                     return k;
