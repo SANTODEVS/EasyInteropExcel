@@ -19,15 +19,15 @@ namespace Test_excel
             }
 
 
-            OExcel.ToExcel(people, Environment.CurrentDirectory, "teste.xlsx", OExcel.XlFileFormat.xlWorkbookDefault);
+            //OExcel.ToExcel(people, Environment.CurrentDirectory, "teste.xlsx", OExcel.XlFileFormat.xlWorkbookDefault);
             OExcel.ExcelToWriteTxt(
-                $"{Environment.CurrentDirectory}\\teste.xlsx",
+                $"{Environment.CurrentDirectory}\\VIVO_MEC_OBM_03092021_2110.xlsx",
                 Environment.CurrentDirectory, 
                 OExcel.TextFormat.txt,
-                "Planilha1",
-                new string[] { "A", "B" },
-                1,
-                "A",
+                "BillingOffer",
+                new string[] { "B", "C", "D", "E", "H", "BH" },
+                5,
+                "B",
                 ";"
                 );
         }

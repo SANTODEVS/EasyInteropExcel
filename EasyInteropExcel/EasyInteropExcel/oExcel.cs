@@ -148,6 +148,7 @@ namespace EasyInteropExcel
                 xlExcel.Range usedRange = ws.UsedRange;
 
                 var ultimaLinhaUsada = usedRange.Count;
+                var PararLoopLinhas = false;
                 for (int i = linha; i < ultimaLinhaUsada; i++)
                 {
                     //bool temDados = false;
@@ -157,9 +158,13 @@ namespace EasyInteropExcel
                         string celulaEx = Convert.ToString(a.Address);
                         if (celulaEx.Split(new char[] { '$' }, StringSplitOptions.None)[1] == CelulaBase)
                         {
-                            if (a.Value == null || string.IsNullOrEmpty(Convert.ToString(a.Value))) break;
+                            if (a.Value == null || string.IsNullOrEmpty(Convert.ToString(a.Value)))
+                            {
+                                PararLoopLinhas = true;
+                                break;
+                            }
                         }
-                        if (ValidaCelula(celulaEx, listaCelValidas, out bool primeiraCelula, out bool ultimaCelula))
+                        if ((ValidaCelula(celulaEx, listaCelValidas, out bool primeiraCelula, out bool ultimaCelula)) && !PararLoopLinhas)
                         {
 
                             string valorEx = Convert.ToString(a.Value) is null ? "" : Convert.ToString(a.Value);
@@ -170,6 +175,10 @@ namespace EasyInteropExcel
                             }
 
                         }
+                    }
+                    if (PararLoopLinhas)
+                    {
+                        break;
                     }
                 }
 
