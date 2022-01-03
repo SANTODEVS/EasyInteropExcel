@@ -150,17 +150,16 @@ namespace EasyInteropExcel
                 var ultimaLinhaUsada = usedRange.Count;
                 for (int i = linha; i < ultimaLinhaUsada; i++)
                 {
-                    bool temDados = false;
+                    //bool temDados = false;
                     xlExcel.Range Range1 = ws.Range[$"{listaCelValidas[0]}{i}", $"{listaCelValidas[listaCelValidas.Length - 1]}{i}"];
                     foreach (xlExcel.Range a in Range1.Rows.Cells)
                     {
-
                         string celulaEx = Convert.ToString(a.Address);
                         if (celulaEx.Split(new char[] { '$' }, StringSplitOptions.None)[1] == CelulaBase)
                         {
-                            if (!string.IsNullOrEmpty(Convert.ToString(a.Value))) temDados = true;
+                            if (a.Value == null || string.IsNullOrEmpty(Convert.ToString(a.Value))) break;
                         }
-                        if (ValidaCelula(celulaEx, listaCelValidas, out bool primeiraCelula, out bool ultimaCelula) && temDados)
+                        if (ValidaCelula(celulaEx, listaCelValidas, out bool primeiraCelula, out bool ultimaCelula))
                         {
 
                             string valorEx = Convert.ToString(a.Value) is null ? "" : Convert.ToString(a.Value);
@@ -168,7 +167,6 @@ namespace EasyInteropExcel
                             {
                                 if (!ultimaCelula) w.Write(valorEx + Delimitador);
                                 else w.WriteLine(valorEx);
-
                             }
 
                         }
