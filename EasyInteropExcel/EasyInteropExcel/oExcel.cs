@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using xlExcel = Microsoft.Office.Interop.Excel;
+using Spire.Xls;
 
 
 namespace EasyInteropExcel
@@ -250,6 +251,22 @@ namespace EasyInteropExcel
             }
 
             return -1;
+
+        }
+
+        /// <summary>
+        /// Converte um arquivo XLSX em CSV
+        /// </summary>
+        /// <param name="nomeArquivo">Nome do arquivo XLSX que será convertido. Ex.: "Ciclo01"</param>
+        /// <param name="path">Diretorio onde está salvo o arquivo a ser convertido. Ex.: "C:\\Users\\user\\Arquivos_Excel"</param>
+        /// <param name="aba">`Posição da aba da planilha que deseja realizar a conversão. Ex.: "1"</param>
+        public static void ConvertToCSV(string nomeArquivo, string path, int aba)
+        {
+
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile(path + "\\" + nomeArquivo + ".xlsx"); // Carrega o arquivo XLSX
+            Worksheet sheet = workbook.Worksheets[aba]; // Seleciona a aba desejada
+            sheet.SaveToFile(path + "\\" + nomeArquivo + ".csv", ";", System.Text.Encoding.UTF8); // Salva a aba em .csv
 
         }
     }
