@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
+    <PackageReference Include="Spire.XLS" Version="11.12.2" />
     
       <None Include="..\..\CODE_OF_CONDUCT.md">
         <Pack>True</Pack>
