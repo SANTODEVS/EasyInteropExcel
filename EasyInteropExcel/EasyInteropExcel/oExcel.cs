@@ -269,5 +269,48 @@ namespace EasyInteropExcel
             sheet.SaveToFile(path + "\\" + nomeArquivo + ".csv", ";", System.Text.Encoding.UTF8); // Salva a aba em .csv
 
         }
+
+
+
+        /// <summary>
+        /// Converte um arquivo excel em csv
+        /// </summary>
+        /// <param name="nomeExcel">Nome do arquivo excel que tera uma de suas abas convertida. </param>
+        /// <param name="dirArq">Diretorio onde esta salvo o arquivo.</param>
+        /// <param name="nomeSheet">Nome da aba que sera convertida</param>
+        /// <param name="ext">Extensao do arquivo que sera convertido</param>
+        /// <param name="dirBkpArq">Diretorio que o arquivo original sera movido depois da extracao</param>
+        /// <param name="compNome">Complemento do nome do arquivo. Normalmente coloco o nome da aba sem espacos e caracteres </param>
+
+        public static void ConvExcelToCSV(string nomeExcel, string nomeSheet, string dirArq, string ext, string dirBkpArq, string compNome)
+        {
+            static Microsoft.Office.Interop.Excel.Application oExcel;
+            var nomeNovo = Path.GetFileNameWithoutExtension(nomeArquivo) + ".csv";
+
+            if(oExcel == null)
+            {
+                oExcel = new oExcel();
+            }
+            oExcel.Visible = false;
+            oExcel.Workbooks.Open(nomeArquivo);
+
+            var qtdeSheet = oExcel.ActiveWorkbook.Sheets.Count;
+
+            for (int k = 1; k <= qtdeSheet; k++)
+            {
+                string no = oExcel.ActiveWorkbook.Sheets[k].Name;
+                if (no.Equals(nomeSheet))
+                {
+                    oExcel.ActiveWorkbook.Sheets[k].Select();
+                    oExcel.ActiveWorkbook.SaveAs(dirArq + Path.GetFileNameWithoutExtension(nomeExcel) + "_" + compNome, oExcel.XlFileFormat.xlCSVMSDOS);
+                }
+            }
+            oExcel.ActiveWorkbook.Close(false);
+            oExcel.Quit();
+            oExcel = null;
+
+            File.Move(nomeExcel, dirBkpArq + Path.GetFileName(nomeExcel));
+            var arquivoNome = Directory.GetFiles(dirArq,"*.csv")
+        }
     }
 }
