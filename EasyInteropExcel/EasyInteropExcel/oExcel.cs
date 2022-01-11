@@ -255,24 +255,6 @@ namespace EasyInteropExcel
         }
 
         /// <summary>
-        /// Converte um arquivo XLSX em CSV
-        /// </summary>
-        /// <param name="nomeArquivo">Nome do arquivo XLSX que será convertido. Ex.: "Ciclo01"</param>
-        /// <param name="path">Diretorio onde está salvo o arquivo a ser convertido. Ex.: "C:\\Users\\user\\Arquivos_Excel"</param>
-        /// <param name="aba">`Posição da aba da planilha que deseja realizar a conversão. Ex.: "1"</param>
-        public static void ConvertToCSV(string nomeArquivo, string path, int aba)
-        {
-
-            Workbook workbook = new Workbook();
-            workbook.LoadFromFile(path + "\\" + nomeArquivo + ".xlsx"); // Carrega o arquivo XLSX
-            Worksheet sheet = workbook.Worksheets[aba]; // Seleciona a aba desejada
-            sheet.SaveToFile(path + "\\" + nomeArquivo + ".csv", ";", System.Text.Encoding.UTF8); // Salva a aba em .csv
-
-        }
-
-
-
-        /// <summary>
         /// Converte um arquivo excel em csv
         /// </summary>
         /// <param name="nomeExcel">Nome do arquivo excel que tera uma de suas abas convertida. </param>
@@ -282,27 +264,24 @@ namespace EasyInteropExcel
         /// <param name="dirBkpArq">Diretorio que o arquivo original sera movido depois da extracao</param>
         /// <param name="compNome">Complemento do nome do arquivo. Normalmente coloco o nome da aba sem espacos e caracteres </param>
 
-        public static void ConvExcelToCSV(string nomeExcel, string nomeSheet, string dirArq, string ext, string dirBkpArq, string compNome)
+        public static void ConvertToCSV(string nomeExcel, string nomeSheet, string dirArq, string ext, string dirBkpArq, string compNome)
         {
-            static Microsoft.Office.Interop.Excel.Application oExcel;
-            var nomeNovo = Path.GetFileNameWithoutExtension(nomeArquivo) + ".csv";
+            Microsoft.Office.Interop.Excel.Application oExcel = new Microsoft.Office.Interop.Excel.Application();
+            var nomeNovo = Path.GetFileNameWithoutExtension(nomeExcel) + ".csv";
 
-            if(oExcel == null)
-            {
-                oExcel = new oExcel();
-            }
             oExcel.Visible = false;
-            oExcel.Workbooks.Open(nomeArquivo);
+            oExcel.Workbooks.Open(nomeExcel);
 
             var qtdeSheet = oExcel.ActiveWorkbook.Sheets.Count;
 
             for (int k = 1; k <= qtdeSheet; k++)
             {
-                string no = oExcel.ActiveWorkbook.Sheets[k].Name;
-                if (no.Equals(nomeSheet))
+                int indiceSheet = ValidaSheet(nomeSheet, oExcel);
+                if (indiceSheet != -1)
                 {
-                    oExcel.ActiveWorkbook.Sheets[k].Select();
-                    oExcel.ActiveWorkbook.SaveAs(dirArq + Path.GetFileNameWithoutExtension(nomeExcel) + "_" + compNome, oExcel.XlFileFormat.xlCSVMSDOS);
+                    xlExcel.Worksheet ws = (xlExcel.Worksheet)oExcel.Sheets[indiceSheet];
+                 
+                    oExcel.ActiveWorkbook.SaveAs(dirArq + Path.GetFileNameWithoutExtension(nomeExcel) + "_" + compNome, xlExcel.XlFileFormat.xlCSVMSDOS);
                 }
             }
             oExcel.ActiveWorkbook.Close(false);
@@ -310,7 +289,7 @@ namespace EasyInteropExcel
             oExcel = null;
 
             File.Move(nomeExcel, dirBkpArq + Path.GetFileName(nomeExcel));
-            var arquivoNome = Directory.GetFiles(dirArq,"*.csv")
+            var arquivoNome = Directory.GetFiles(dirArq, "*.csv");
         }
     }
 }
