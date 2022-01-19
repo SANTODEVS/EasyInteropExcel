@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using xlExcel = Microsoft.Office.Interop.Excel;
-using Spire.Xls;
 
 
 namespace EasyInteropExcel
@@ -280,7 +279,7 @@ namespace EasyInteropExcel
                 if (indiceSheet != -1)
                 {
                     xlExcel.Worksheet ws = (xlExcel.Worksheet)oExcel.Sheets[indiceSheet];
-                 
+
                     oExcel.ActiveWorkbook.SaveAs(dirArq + Path.GetFileNameWithoutExtension(nomeExcel) + "_" + compNome, xlExcel.XlFileFormat.xlCSVMSDOS);
                 }
             }
